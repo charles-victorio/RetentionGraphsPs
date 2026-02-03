@@ -1,0 +1,2 @@
+cohort - first cal year of the academic year they graduated. `2023-24` -> 2023
+split double majors, so head counts are increased but retention analysis is good
