@@ -200,7 +200,7 @@ with tab1:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=-0.2,
+            y=-0.3,
             xanchor="center",
             x=0.5
         ),
@@ -220,16 +220,16 @@ with tab1:
     st.plotly_chart(fig1, use_container_width=True)
     
     # Summary stats
-    st.subheader("Summary Statistics")
-    scol1, scol2, scol3 = st.columns(3)
+    st.subheader("Summary Statistics (2010-2020 Cohorts)")
+    scol1, scol2 = st.columns(2)
     
-    total_students = filtered['headcount'].sum()
-    retained = filtered[filtered['outcome_display'] == 'Stayed in Department']['headcount'].sum()
+    filtered_cohorts = filtered[(filtered['cohort'] >= 2010) & (filtered['cohort'] <= 2020)]
+    total_students = filtered_cohorts['headcount'].sum()
+    retained = filtered_cohorts[filtered_cohorts['outcome_display'] == 'Stayed in Department']['headcount'].sum()
     retention_rate = (retained / total_students * 100) if total_students > 0 else 0
     
     scol1.metric("Total Students", f"{int(total_students)}")
     scol2.metric("Retention Rate", f"{retention_rate:.1f}%")
-    scol3.metric("Cohorts", f"{len(pivot)}")
 
 # TAB 2: Retention Comparison
 with tab2:
