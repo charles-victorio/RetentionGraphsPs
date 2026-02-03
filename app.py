@@ -23,7 +23,7 @@ def load_data():
         'mathematics': 'math',
         'applied mathematics': 'math',
         'financial actuarial mathematics': 'math',
-        'mathematics/applied science': 'math',
+        'mathematics applied science': 'math',
         'mathematics of computation': 'math',
         'mathematics for teaching': 'math',
         'mathematics/economics': 'math',
@@ -48,7 +48,13 @@ def load_data():
     df['cohort'] = df['cohort'].str[:4].astype(int)
     df['urm'] = df['urm'].map({'urm': True, 'non-urm': False})
     df['fresh'] = df['fresh'].map({'freshman': True, 'transfer': False})
-    df['start_maj'] = df['start_maj'].replace('general chemistry', 'chemistry').replace('undeclared-physical science', 'undeclared')
+    df['start_maj'] = df['start_maj'] \
+        .replace('general chemistry', 'chemistry') \
+        .replace('undeclared-physical science', 'undeclared') \
+        .replace('mathematics/applied science', 'mathematics applied science') # get rid of slash so it isnt treated like a double major
+    
+    df['end_maj'] = df['end_maj'] \
+        .replace('mathematics/applied science', 'mathematics applied science')
 
     # Track depts
     df['start_dept'] = df['start_maj'].map(maj2dept_and_friends)
