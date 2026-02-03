@@ -404,6 +404,7 @@ with tab3:
     st.plotly_chart(fig, use_container_width=True)
 
     # Summary stats
+    st.subheader("Summary Statistics (2010-2020 Cohorts)")
     scol1, scol2 = st.columns(2)
 
     filtered_cohorts = undeclared[(undeclared['cohort'] >= 2010) & (undeclared['cohort'] <= 2020)]
@@ -411,8 +412,8 @@ with tab3:
     stayed = filtered_cohorts[filtered_cohorts['outcome'] == 'Stayed in Physical Sciences']['headcount'].sum()
     retention_rate = (stayed / total_students * 100) if total_students > 0 else 0
 
-    scol1.metric("Total Undeclared Students (2010-2020)", f"{int(total_students)}")
-    scol2.metric("Stayed in Physical Sciences (2010-2020)", f"{retention_rate:.1f}%")
+    scol1.metric("Total Undeclared Students", f"{int(total_students)}")
+    scol2.metric("Stayed in Physical Sciences", f"{retention_rate:.1f}%")
 
 
 # Footer
