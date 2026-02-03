@@ -102,7 +102,11 @@ All students were classified as either:
 2. Getting a degree in another department (either in the division or elsewhere), or
 3. Not getting a degree.
 
-**Key Findings:** URM rates are consistently worse than Non-URM rates. Transfer rates are consistently better than Freshman rates. Rates vary significantly between departments.
+**Key Findings:**
+- URM rates are consistently worse than Non-URM rates.
+- Transfer rates are consistently better than Freshman rates.
+- Rates vary significantly between departments.
+- Most undeclared students leave the physical sciences entirely.
 """)
 
 with st.expander("ℹ️ Methodological Notes"):
@@ -115,14 +119,14 @@ with st.expander("ℹ️ Methodological Notes"):
 st.markdown("---")
 
 # Tab selection
-tab1, tab2 = st.tabs(["📈 Per-Department Outcomes Over Time", "📊 Department Retention Comparison"])
+tab1, tab2, tab3 = st.tabs(["📈 Per-Department Outcomes Over Time", "📊 Department Retention Comparison", "👤 Undeclared Outcomes"])
 
 # TAB 1: Per-Department Outcomes
 with tab1:
     st.subheader("Student Outcomes by Department Over Time")
     
     col1, col2, col3 = st.columns(3)
-    
+
     departments = sorted([d for d in df['start_dept'].dropna().unique() if d != 'undeclared'])
     
     with col1:
@@ -311,6 +315,99 @@ with tab2:
     )
     
     st.plotly_chart(fig2, use_container_width=True)
+
+with tab3:
+    st.subheader("Undeclared Student Outcomes")
+
+    # Define physical sciences departments
+    phys_sci_depts = {'aos', 'chemistry and biochemistry', 'epss', 
+                    'institute of environment and sustainability', 'math', 
+                    'physics and astronomy', 'statistics'}
+
+    # Filter for undeclared students
+    undeclared = df[df['start_dept'] == 'undeclared'].copy()
+
+    # Categorize outcomes
+    def categorize_undeclared_outcome(row):
+        if row['end_dept'] == 'no degree':
+            return 'No Degree'
+        elif row['end_dept'] in phys_sci_depts:
+            return 'Stayed in Physical Sciences'
+        else:
+            return 'Other Degree'
+
+    undeclared['outcome'] = undeclared.apply(categorize_undeclared_outcome, axis=1)
+
+    # Group and calculate percentages
+    grouped = undeclared.groupby(['cohort', 'outcome'])['headcount'].sum().reset_index()
+    totals = undeclared.groupby('cohort')['headcount'].sum().reset_index()
+    totals.rename(columns={'headcount': 'total'}, inplace=True)
+
+    grouped = grouped.merge(totals, on='cohort')
+    grouped['percentage'] = (grouped['headcount'] / grouped['total']) * 100
+
+    # Pivot
+    pivot = grouped.pivot(index='cohort', columns='outcome', values='percentage').fillna(0)
+
+    # Create figure
+    fig = go.Figure()
+
+    outcomes = ['Stayed in Physical Sciences', 'Other Degree', 'No Degree']
+    colors = ['#268bd2', '#859900', '#dc322f']
+
+    for i, outcome in enumerate(outcomes):
+        if outcome in pivot.columns:
+            fig.add_trace(go.Scatter(
+                x=pivot.index,
+                y=pivot[outcome],
+                name=outcome,
+                stackgroup='one',
+                fillcolor=colors[i],
+                line=dict(width=0.5, color=colors[i]),
+                hovertemplate='%{y:.1f}%<extra></extra>'
+            ))
+
+    fig.update_layout(
+        title='Undeclared Student Outcomes',
+        xaxis_title='Cohort Year',
+        yaxis_title='Percentage (%)',
+        hovermode='x unified',
+        height=500,
+        yaxis=dict(range=[0, 100]),
+        xaxis=dict(tickmode='linear', tick0=2010, dtick=1),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.3,
+            xanchor="center",
+            x=0.5
+        ),
+        shapes=[
+            dict(
+                type='line',
+                x0=2020,
+                x1=2020,
+                y0=0,
+                y1=100,
+                line=dict(color='#657b83', width=2, dash='dash'),
+                opacity=0.5
+            )
+        ]
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Summary stats
+    scol1, scol2 = st.columns(2)
+
+    filtered_cohorts = undeclared[(undeclared['cohort'] >= 2010) & (undeclared['cohort'] <= 2020)]
+    total_students = filtered_cohorts['headcount'].sum()
+    stayed = filtered_cohorts[filtered_cohorts['outcome'] == 'Stayed in Physical Sciences']['headcount'].sum()
+    retention_rate = (stayed / total_students * 100) if total_students > 0 else 0
+
+    scol1.metric("Total Undeclared Students (2010-2020)", f"{int(total_students)}")
+    scol2.metric("Stayed in Physical Sciences (2010-2020)", f"{retention_rate:.1f}%")
+
 
 # Footer
 st.markdown("---")
