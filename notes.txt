@@ -1,2 +1,80 @@
 cohort - first cal year of the academic year they graduated. `2023-24` -> 2023
 split double majors, so head counts are increased but retention analysis is good
+
+
+
+make sankey diagram
+
+Left axis: "Show starting groups as:" [Major | Dept | Division | College | STEM]
+Right axis: "Show ending groups as:" [Major | Dept | Division | College | STEM]
+Filters:
+- who started where, who ended where
+    - picking a college unlocks a department filter within it, picking a department unlocks a division -> major filter.
+- Retention vs. switching is a useful binary toggle — show only students who stayed within the same department/college, or only students who switched
+    - only show students who stayed in / switched from their major/division/department/college 
+- Volume threshold is underrated — a slider like "only show flows with at least N students" 
+- make cohort slider
+- advanced filters
+    - filter by origin, destination, both
+
+art history', 'business economics', 'chemical engineering',
+'economics',
+'european languages and transcultural studies with french and francophone',
+'geophysics/geophysics and space physics',
+'international development studies', 'linguistics',
+'political science', 'psychology', 'music history', 'anthropology',
+'anthropology-bs', 'asian american studies', 'bioengineering',
+'biology', 'computational and systems biology', 'computer science',
+'ecology, behavior, and evolution', 'electrical engineering',
+'english', 'gender studies', 'geography/environmental studies',
+'history', 'human biology and society - bs', 'korean',
+'microbiology, immunology, and molecular genetics',
+'molecular, cell, and developmental biology', 'neuroscience',
+'nursing-prelicensure', 'physiological science', 'psychobiology',
+'chemistry/materials science', 'comparative literature',
+'geography', 'materials engineering', 'mechanical engineering',
+'sociology', 'geophysics/applied geophysics',
+'aerospace engineering', 'cognitive science',
+'computer science and engineering', 'global studies',
+'linguistics and computer science', 'linguistics and philosophy',
+'classical civilization', 'american literature and culture',
+'philosophy', 'asian humanities', 'civil engineering',
+'communication', 'film and television',
+'geology/engineering geology', 'arabic', 'general chemistry',
+'asian studies', 'japanese', 'chicana and chicano studies',
+'spanish', 'russian language and literature',
+'african american studies', 'art',
+'human biology and society - ba', 'applied linguistics',
+'atmospheric and oceanic sciences/mathematics',
+'italian and special fields', 'marine biology', 'music', 'theater',
+'linguistics and psychology', 'geology/paleobiology',
+'linguistics and asian languages and cultures',
+'architectural studies', 'study of religion',
+'central and east european languages and cultures',
+'spanish and community and culture', 'spanish and portuguese',
+'world arts and cultures', 'ethnomusicology', 'jewish studies',
+'design / media arts', 'middle eastern studies', 'chinese',
+'european languages and transcultural studies with german',
+'linguistics and french', 'latin american studies',
+'french and linguistics', 'nordic studies',
+'american indian studies',
+'linguistics and scandinavian languages',
+'linguistics and spanish', 'russian studies', 'iranian studies',
+'asian languages and linguistics', 'linguistics and italian',
+'computer engineering', 'ancient near east and egyptology',
+'labor studies', 'public affairs',
+'portuguese and brazilian studies',
+'individual field of concentration',
+'education and social transformation', 'greek and latin']
+
+
+modified to remove commas:
+Ecology Behavior and Evolution
+Theater Film and Television
+Individual Field of Concentration in Theater Film and Television
+Microbiology Immunology and Molecular Genetics
+Molecular Cell and Developmental Biology
+Religion Study of
+Mathematics Financial Actuarial
+Mathematics Applied
+Linguistics Applied
